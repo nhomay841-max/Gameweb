@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7f2">
+  <title>SWEETIE — Tiệm Bánh Ngọt Mơ Mộng</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="auth-gate" id="authGate" aria-labelledby="authTitle">
+    <div class="auth-card">
+      <div class="welcome-art" aria-hidden="true">🧁<span>✨</span></div>
+      <p class="eyebrow">SWEETIE · TIỆM BÁNH MƠ MỘNG</p>
+      <h1 id="authTitle">Chào mừng chủ tiệm ♡</h1>
+      <p class="auth-copy">Đăng nhập để chơi và lưu tiệm bánh của bạn trên mọi thiết bị.</p>
+      <form id="authForm">
+        <label for="authEmail">Email</label>
+        <input id="authEmail" name="email" type="email" autocomplete="email" required>
+        <label for="authPassword">Mật khẩu</label>
+        <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button class="primary-button auth-submit" id="authSubmit" type="submit">Đăng nhập</button>
+      </form>
+      <button class="auth-toggle" id="authToggle" type="button">Chưa có tài khoản? Đăng ký</button>
+      <button class="guest-play-button hidden" id="guestPlayButton" type="button">Chơi trên thiết bị này</button>
+      <p class="auth-feedback" id="authFeedback" role="status" aria-live="polite"></p>
+      <small class="auth-note">Tiến trình tài khoản được lưu an toàn riêng cho bạn.</small>
+    </div>
+  </section>
+  <div class="app-shell" id="gameApp" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="SWEETIE - Trang chủ">
+        <span class="brand-icon">🧁</span>
+        <span><strong>SWEETIE</strong><small>tiệm bánh mơ mộng</small></span>
+      </a>
+      <div class="topbar-right">
+        <div class="level-pill"><span>✿</span><span id="levelLabel">Cấp 1</span></div>
+        <div class="wallet"><span>🪙</span><strong id="coinLabel">0</strong><small>xu</small></div>
+        <div class="game-clock hidden" id="gameClock" aria-live="polite"><span>🕒</span><div><strong id="clockLabel">08:00 AM</strong><small id="clockStatus">Giờ mở cửa · 1 phút = 1 giây</small></div></div>
+        <button class="pause-button hidden" id="pauseButton" aria-pressed="false">⏸ Tạm dừng</button>
+        <button class="replay-day-button hidden" id="replayDayButton">↻ Chơi lại ngày</button>
+        <button class="primary-button shift-button hidden" id="shiftButton">Mở cửa tiệm ✨</button>
+        <span class="account-email" id="accountEmailLabel"></span>
+        <button class="account-button" id="signOutButton" type="button">Đăng xuất</button>
+        <button class="icon-button" id="soundButton" aria-label="Bật âm thanh" title="Bật âm thanh" aria-pressed="false">♫</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow" id="dateLabel">MỘT NGÀY MỚI Ở PHỐ BÁNH</p>
+          <h1>Chào buổi sáng, chủ tiệm <span>♡</span></h1>
+          <p class="subtitle" id="subtitleText">Hãy chuẩn bị kho hàng và trang trí trước khi mở cửa nhé!</p>
+        </div>
+        <div class="weather-card"><span>☀️</span><div><strong>Trời đẹp</strong><small>Ngày tuyệt vời để làm bánh</small></div></div>
+      </section>
+
+      <nav class="tabs" aria-label="Khu vực tiệm bánh">
+        <button class="tab active" data-tab="welcome"><span>🌤️</span> Chuẩn bị</button>
+        <button class="tab" data-tab="shop"><span>🏠</span> Tiệm bánh</button>
+        <button class="tab" data-tab="kitchen"><span>🍰</span> Nhà bếp</button>
+        <button class="tab" data-tab="pantry"><span>🧺</span> Kho nguyên liệu</button>
+        <button class="tab" data-tab="decor"><span>🌷</span> Trang trí</button>
+        <button class="tab" data-tab="reviews"><span>⭐</span> Đánh giá tiệm bánh <span class="review-count hidden" id="reviewCount">0</span></button>
+      </nav>
+
+      <section class="view active" id="view-welcome">
+        <div class="welcome-card">
+          <div class="welcome-art" aria-hidden="true">🧁<span>✨</span></div>
+          <p class="eyebrow">CHÀO MỪNG ĐẾN VỚI SWEETIE</p>
+          <h2 id="welcomeTitle">Tiệm bánh của bạn đã sẵn sàng</h2>
+          <p class="welcome-copy" id="welcomeCopy">Chưa cần vội mở cửa đâu! Bạn có thể nhập thêm nguyên liệu hoặc trang trí tiệm trước khi bắt đầu ngày đầu tiên.</p>
+          <div class="day-summary hidden" id="daySummary"></div>
+          <form class="welcome-name-form" id="welcomeShopNameForm">
+            <label for="welcomeShopNameInput">Đặt tên cho cửa hàng của bạn</label>
+            <div><input id="welcomeShopNameInput" maxlength="32" autocomplete="off" placeholder="Ví dụ: Bánh Ngọt Nhà An"><button type="submit">Lưu tên</button></div>
+          </form>
+          <div class="prep-actions">
+            <button class="prep-action" data-go="pantry"><span>🧺</span><strong>Nhập kho nguyên liệu</strong><small>Chuẩn bị đủ đồ cho mẻ bánh đầu tiên</small></button>
+            <button class="prep-action" data-go="decor"><span>🌷</span><strong>Trang trí cửa hàng</strong><small>Tạo nên tiệm bánh theo phong cách của bạn</small></button>
+          </div>
+          <button class="primary-button start-button" id="startDayButton" data-start-game>Bắt đầu chơi · Mở cửa tiệm ✨</button>
+          <small class="welcome-footnote">Khách hàng chỉ ghé sau khi bạn mở cửa. Tiến trình được lưu trên thiết bị này.</small>
+        </div>
+      </section>
+
+      <section class="view" id="view-shop">
+        <div class="shop-layout">
+          <div class="shop-main">
+            <article class="scene-card">
+              <div class="scene-top">
+                <div class="shop-title-group"><p class="eyebrow">TIỆM BÁNH CỦA BẠN</p><div class="shop-name-row"><h2 id="shopName">Tiệm bánh nhỏ</h2><button class="edit-name-button" id="editShopName" aria-label="Đổi tên cửa hàng" title="Đổi tên cửa hàng">✎</button></div><form class="shop-name-form" id="shopNameForm" hidden><label class="sr-only" for="shopNameInput">Tên cửa hàng</label><input id="shopNameInput" maxlength="32" autocomplete="off"><button type="submit" class="save-name-button">Lưu</button><button type="button" class="cancel-name-button" id="cancelShopName">Hủy</button></form></div>
+                <span class="open-badge" id="shopStatus"><i></i> Đang mở cửa</span>
+              </div>
+              <div class="bakery-scene" id="bakeryScene">
+                <div class="window-sun">☀</div>
+                <div class="wall-garland">✿　·　♡　·　✿　·　♡　·　✿</div>
+                <div class="scene-shelf"><span>🍰</span><span>🥐</span><span>🍪</span><span>🧁</span></div>
+                <div class="plant plant-left">🪴</div>
+                <div class="counter"><span class="counter-cake">🍓</span><span class="counter-name" id="counterShopName">SWEETIE</span><span class="counter-flowers">🌼</span></div>
+                <div class="customer-spot" id="customerSpot">💌<small>Khách đang tìm đến...</small></div>
+                <div class="scene-floor"></div>
+              </div>
+              <div class="scene-footer"><span>♡ Một tiệm bánh nhỏ, thật nhiều giấc mơ</span><span id="shopRating">☆ ☆ ☆ ☆ ☆</span></div>
+            </article>
+
+            <div class="section-heading">
+              <div><p class="eyebrow">ĐANG CHỜ ĐƯỢC PHỤC VỤ</p><h2>Khách ghé tiệm <span class="count-bubble" id="orderCount">0</span></h2></div>
+              <button class="text-button" id="refreshOrders">Gọi khách mới <span>↗</span></button>
+            </div>
+            <div class="orders-list" id="ordersList"></div>
+          </div>
+
+          <aside class="shop-sidebar">
+            <article class="side-card grandma-card">
+              <div class="grandma-art">👵🏻<span>✨</span></div>
+              <p class="eyebrow">LỜI NHẮN CỦA BÀ</p>
+              <p class="grandma-quote">“Bánh ngon nhất là chiếc bánh được làm bằng cả trái tim con nhé!”</p>
+              <div class="recipe-note"><span>📖</span><div><strong>Công thức gia truyền</strong><small>Hãy làm bánh để khám phá thêm!</small></div></div>
+            </article>
+            <article class="side-card mission-card">
+              <div class="card-title"><h3>Nhiệm vụ hôm nay</h3><span>✦</span></div>
+              <div class="mission-icon">🎯</div>
+              <strong id="missionTitle">Mẻ bánh đầu tiên</strong>
+              <p id="missionText">Hoàn thành một chiếc bánh bất kỳ</p>
+              <div class="mission-progress"><span id="missionBar"></span></div>
+              <div class="mission-bottom"><small id="missionCount">0 / 1</small><strong>🪙 30</strong></div>
+            </article>
+            <article class="side-card day-card">
+              <span class="day-icon">📒</span><div><small>SỔ THU CHI HÔM NAY</small><strong id="revenueLabel">+0 xu</strong><span>Doanh thu · <b id="servedLabel">0</b> khách</span></div>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-kitchen">
+        <div class="section-heading kitchen-heading">
+          <div><p class="eyebrow">TỪ CÔNG THỨC CỦA BÀ</p><h2>Hôm nay mình làm món gì nhỉ?</h2></div>
+          <div class="quality-legend"><span>✨ Chất lượng bánh sẽ ảnh hưởng đến giá bán!</span></div>
+        </div>
+        <div class="kitchen-layout">
+          <div class="recipe-grid" id="recipeGrid"></div>
+          <aside class="baking-card" id="bakingCard">
+            <div class="oven-illustration" id="ovenIllustration"><span>🥣</span><i>♡</i></div>
+            <p class="eyebrow">GÓC LÀM BÁNH</p>
+            <h3 id="bakingTitle">Sẵn sàng vào bếp?</h3>
+            <p class="muted" id="bakingHint">Chọn một công thức bên trái để bắt đầu mẻ bánh thơm ngon nhé.</p>
+            <div class="baking-meter hidden" id="bakingMeter"><div class="meter-track"><span id="meterFill"></span><i id="sweetSpot"></i></div><div class="meter-labels"><small>Chưa chín</small><small>Vừa xinh!</small><small>Cháy mất</small></div></div>
+            <button class="primary-button wide" id="bakeButton" disabled>Chọn công thức trước nhé</button>
+            <div class="baking-tip">💡 <span>Mẹo của bà: canh đúng lúc bánh vừa chín để đạt chất lượng hoàn hảo!</span></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-pantry">
+        <div class="section-heading">
+          <div><p class="eyebrow">ĐỪNG ĐỂ BẾP THIẾU NGUYÊN LIỆU</p><h2>Kho bánh của bạn</h2></div>
+          <div class="stock-note">🧺 Hàng nhập về sẽ sẵn sàng dùng ngay</div>
+        </div>
+        <div class="pantry-summary"><div>🧂<span><small>LOẠI NGUYÊN LIỆU</small><strong id="ingredientKinds">0</strong></span></div><div>📦<span><small>TỔNG SỐ LƯỢNG</small><strong id="ingredientTotal">0</strong></span></div><div>🪙<span><small>SỐ DƯ CỦA BẠN</small><strong id="pantryCoins">0 xu</strong></span></div></div>
+        <div class="ingredient-grid" id="ingredientGrid"></div>
+      </section>
+
+      <section class="view" id="view-decor">
+        <div class="section-heading">
+          <div><p class="eyebrow">BIẾN TIỆM BÁNH THÀNH TỔ ẤM</p><h2>Thêm một chút xinh xắn</h2></div>
+          <div class="stock-note">🌷 Trang trí đẹp giúp tiệm thêm hấp dẫn</div>
+        </div>
+        <div class="decor-banner"><div><p class="eyebrow">GÓC NHỎ THÂN THƯƠNG</p><h3>Mỗi món đồ đều kể một câu chuyện</h3><p>Chọn những món đồ bạn yêu thích để tạo nên tiệm bánh của riêng mình.</p></div><div class="decor-banner-art">🪟🌼🪴</div></div>
+        <div class="decor-grid" id="decorGrid"></div>
+        <article class="upgrade-card"><div class="upgrade-icon">🏡</div><div><p class="eyebrow">GIẤC MƠ TIẾP THEO</p><h3 id="upgradeTitle">Tiệm bánh nổi tiếng</h3><p id="upgradeDescription">Phục vụ thêm khách và tích lũy danh tiếng để mở rộng cửa hàng.</p></div><button class="primary-button" id="upgradeButton">Xem tiến độ</button></article>
+      </section>
+
+      <section class="view" id="view-reviews">
+        <div class="section-heading reviews-heading">
+          <div><p class="eyebrow">LẮNG NGHE ĐỂ TIỆM MÌNH TỐT HƠN</p><h2>Đánh giá tiệm bánh</h2></div>
+          <div class="rating-summary"><strong id="ratingValue">1.0</strong><span id="ratingStars" aria-label="1 trên 5 sao">★☆☆☆☆</span><small id="ratingCount">Chưa có đánh giá</small></div>
+        </div>
+        <p class="reviews-intro">Khách sẽ để lại lời nhắn sau khi được phục vụ hoặc phải rời đi vì chờ lâu. Hãy chọn cách trả lời để xây dựng danh tiếng cho tiệm.</p>
+        <div class="reviews-list" id="reviewsList"></div>
+      </section>
+    </main>
+    <footer>Được làm bằng tình yêu và một chút đường bột <span>♡</span> <button id="resetButton" class="reset-button">Chơi lại</button></footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="game.js"></script>
+</body>
+</html>
